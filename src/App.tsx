@@ -1,12 +1,18 @@
-import './App.css'
+import "./App.css";
+import SignUp from "./components/SignUp";
+import Main from "./components/Main";
+import NotFound from "./components/NotFound";
+import Login from "./components/Login";
 
 function App() {
-
-  return (
-    <>
-      <h1>Hello</h1>
-    </>
-  )
+    return (
+        <>
+            <Login />
+            <SignUp />
+            <Main />
+            <NotFound />
+        </>
+    );
 }
 
-export default App
+export default App;
