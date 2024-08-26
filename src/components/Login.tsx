@@ -10,19 +10,44 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import { LoginResponse } from "../types/loginResponse";
+import { LOGIN } from "../mutations/authMutations";
+import {useNavigate} from "react-router-dom";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [failLogin, setFalLogin] = useState(false);
+    const [login] = useMutation<LoginResponse>(LOGIN);
+    const navigate = useNavigate();
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log({
-            email,
-            password,
-        });
+        const loginInput = { email, password };
+
+        try {
+            const result = await login({ variables: { loginInput } });
+            console.log(result);
+            if (result.data) {
+                localStorage.setItem("token", result.data.login.accessToken);
+            }
+
+            if (localStorage.getItem("token")) {
+                navigate("/");
+            }
+        } catch (error: unknown) {
+            if (error instanceof Error && error.message === "Unauthorized") {
+                console.log(error.message);
+                setFalLogin(true);
+                return;
+            }
+            console.log(error);
+            
+            alert("エラーが発生しました");
+        }
     };
 
     return (
@@ -73,6 +98,11 @@ export default function SignIn() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
+                        {failLogin && (
+                            <Typography color="red">
+                                メールアドレスまたはパスワードが間違っています
+                            </Typography>
+                        )}
                         <Button
                             type="submit"
                             fullWidth
