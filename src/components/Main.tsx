@@ -29,7 +29,7 @@ const Main = () => {
                 {error && <Typography color="red">Error</Typography>}
                 {!loading && !error && (
                     <>
-                        <AddQuestion />
+                        <AddQuestion userId={userId} />
                         <QuestionTable
                             questions={data?.getQuestionsByUser}
                             userId={userId}

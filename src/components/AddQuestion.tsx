@@ -12,6 +12,7 @@ import {
     Radio,
     RadioGroup,
     Stack,
+    Typography,
 } from "@mui/material";
 import {
     AnswerFormat,
@@ -19,13 +20,95 @@ import {
 } from "../types/answerFormat.enum";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { Question } from "../types/question";
+import { CREATE_QUESTION } from "../mutations/createMutations";
+import { GET_QUESTIONS } from "../queries/questionQueries";
+import { useTheme } from "@mui/material/styles";
 
-export default function AddQuestion() {
+export default function AddQuestion({ userId }: { userId: number }) {
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState("");
-    const [answerFormat, setAnswerFormat] = useState("");
+    const [answerFormat, setAnswerFormat] = useState(AnswerFormat.ONE_CHOICE);
     const [answerChoices, setAnswerChoices] = useState<string[]>([""]);
     const answerFormats = Object.values(AnswerFormat);
+
+    const [isInvalidQuestion, setIsInvalidQuestion] = useState(false); // チェック用のフィールド
+    const [isInvalidAnswerChoices, setIsInvalidAnswerChoices] = useState(false); // チェック用のフィールド
+    const [confirmAnswerChoice, setConfirmAnswerChoice] = useState(false); // チェック用のフィールド
+    const navigate = useNavigate();
+    const [createQuestion] = useMutation<{ createQuestion: Question[] }>(
+        CREATE_QUESTION
+    );
+
+    const theme = useTheme();
+    const errorColor = theme.palette.error.main; // MUIのデフォルトのエラー色
+
+    const resetState = () => {
+        setQuestion("");
+        setAnswerFormat(AnswerFormat.ONE_CHOICE);
+        setAnswerChoices([""]);
+        setIsInvalidQuestion(false);
+        setIsInvalidAnswerChoices(false);
+        setConfirmAnswerChoice(false);
+    };
+
+    const handleCreateQuestion = async () => {
+        setIsInvalidQuestion(false);
+
+        let isValid = false;
+
+        if (question.length === 0) {
+            setIsInvalidQuestion(true);
+            isValid = true;
+        }
+
+        if (
+            answerFormat != AnswerFormat.DESCRIPTION &&
+            answerChoices.some((element) => element === "")
+        ) {
+            setConfirmAnswerChoice(true);
+            isValid = true;
+        }
+
+        if (
+            answerFormat != AnswerFormat.DESCRIPTION &&
+            answerChoices.length === 0
+        ) {
+            setIsInvalidAnswerChoices(true);
+            isValid = true;
+        }
+
+        if (isValid) {
+            return;
+        }
+
+        const createQuestionInput = { question, answerFormat, userId };
+        const createAnswerChoicesInput = answerChoices.map((answerChoice) => ({
+            answerChoice,
+        }));
+
+        try {
+            await createQuestion({
+                variables: { createQuestionInput, createAnswerChoicesInput },
+                refetchQueries: [
+                    { query: GET_QUESTIONS, variables: { userId: userId } },
+                ], // クエリを再実行 一覧を取得
+            });
+
+            resetState();
+            setOpen(false);
+        } catch (error: unknown) {
+            if (error instanceof Error && error.message === "Unauthorized") {
+                localStorage.removeItem("token");
+                alert("セッションが切れました。再度ログインしてください。");
+                navigate("/login");
+                return;
+            }
+            alert("エラーが発生しました。");
+        }
+    };
 
     const addAnswerChoice = () => {
         setAnswerChoices([...answerChoices, ""]);
@@ -35,7 +118,7 @@ export default function AddQuestion() {
         setAnswerChoices(answerChoices.filter((_, i) => i !== index));
     };
 
-    const handleChange = (index: number, value: string) => {
+    const handleChoiceChange = (index: number, value: string) => {
         const newAnswerChoices = [...answerChoices];
         newAnswerChoices[index] = value;
         setAnswerChoices(newAnswerChoices);
@@ -46,6 +129,7 @@ export default function AddQuestion() {
     };
 
     const handleClose = () => {
+        resetState();
         setOpen(false);
     };
 
@@ -76,6 +160,10 @@ export default function AddQuestion() {
                         rows={4}
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
+                        error={isInvalidQuestion}
+                        helperText={
+                            isInvalidQuestion ? "質問内容は必須です" : ""
+                        }
                     />
 
                     <FormLabel id="demo-row-radio-buttons-group-label">
@@ -86,10 +174,13 @@ export default function AddQuestion() {
                         aria-labelledby="demo-row-radio-buttons-group-label"
                         name="row-radio-buttons-group"
                         value={answerFormat}
-                        onChange={(e) => setAnswerFormat(e.target.value)}
+                        onChange={(e) =>
+                            setAnswerFormat(e.target.value as AnswerFormat)
+                        }
                     >
                         {answerFormats?.map((answerFormat) => (
                             <FormControlLabel
+                                key={answerFormat}
                                 value={answerFormat}
                                 control={<Radio />}
                                 label={getAnswerFormatDisplay(answerFormat)}
@@ -101,9 +192,15 @@ export default function AddQuestion() {
                 {answerFormat !== AnswerFormat.DESCRIPTION && (
                     <>
                         <DialogTitle>回答作成</DialogTitle>
+                        {isInvalidAnswerChoices && (
+                            <Typography fontSize={12} color={errorColor} sx={{ ml: 5 }}>
+                                回答選択肢は必須です
+                            </Typography>
+                        )}
                         <DialogContent>
                             {answerChoices.map((answerChoice, index) => (
                                 <Stack
+                                    key={index}
                                     direction="row"
                                     spacing={1}
                                     marginTop={2}
@@ -118,7 +215,20 @@ export default function AddQuestion() {
                                         required
                                         value={answerChoice}
                                         onChange={(e) =>
-                                            handleChange(index, e.target.value)
+                                            handleChoiceChange(
+                                                index,
+                                                e.target.value
+                                            )
+                                        }
+                                        error={
+                                            confirmAnswerChoice &&
+                                            answerChoice === ""
+                                        }
+                                        helperText={
+                                            confirmAnswerChoice &&
+                                            answerChoice === ""
+                                                ? "回答選択肢は必須です"
+                                                : ""
                                         }
                                     />
                                     <IconButton
@@ -143,8 +253,8 @@ export default function AddQuestion() {
                     </>
                 )}
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button onClick={handleClose}>Add</Button>
+                    <Button onClick={handleClose}>キャンセル</Button>
+                    <Button onClick={handleCreateQuestion}>送信</Button>
                 </DialogActions>
             </Dialog>
         </div>

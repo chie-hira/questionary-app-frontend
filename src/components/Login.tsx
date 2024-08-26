@@ -30,7 +30,7 @@ export default function SignIn() {
 
         try {
             const result = await login({ variables: { loginInput } });
-            console.log(result);
+            
             if (result.data) {
                 localStorage.setItem("token", result.data.login.accessToken);
             }
