@@ -19,7 +19,7 @@ export const PrivateRoute = ({ children }: Props) => {
         return <>{children}</>
     }
 
-    return <Navigate to="/signin" />
+    return <Navigate to="/login" />
 }
 
 // ゲスト用のルート

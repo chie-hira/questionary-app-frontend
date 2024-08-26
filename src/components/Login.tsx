@@ -13,7 +13,7 @@ import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import { LoginResponse } from "../types/loginResponse";
 import { LOGIN } from "../mutations/authMutations";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
@@ -45,7 +45,7 @@ export default function SignIn() {
                 return;
             }
             console.log(error);
-            
+
             alert("エラーが発生しました");
         }
     };
