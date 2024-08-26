@@ -5,7 +5,7 @@ import { Payload } from "../types/payload";
 import { useQuery } from "@apollo/client";
 import { Question } from "../types/question";
 import { GET_QUESTIONS } from "../queries/questionQueries";
-import {Stack, Typography} from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import Loading from "./Loading";
 
 const Main = () => {
@@ -29,7 +29,10 @@ const Main = () => {
                 {!loading && !error && (
                     <>
                         {/* <AddTask userId={userId} /> */}
-                        <QuestionTable questions={data?.getQuestionsByUser} userId={userId} />
+                        <QuestionTable
+                            questions={data?.getQuestionsByUser}
+                            userId={userId}
+                        />
                     </>
                 )}
             </Stack>

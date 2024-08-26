@@ -7,6 +7,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { GuestRoute, PrivateRoute } from "./AuthRoute";
 import { ApolloProvider } from "@apollo/client";
 import client from "./apolloClient";
+import AnswerForm from "./components/AnswerForm";
+import AnswerResult from "./components/AnswerResult";
 
 function App() {
     return (
@@ -24,6 +26,14 @@ function App() {
                     <Route
                         path="/"
                         element={<PrivateRoute children={<Main />} />}
+                    />
+                    <Route
+                        path="/questions/answer-form/:id"
+                        element={<AnswerForm />}
+                    />
+                    <Route
+                        path="/questions/result/:id"
+                        element={<AnswerResult />}
                     />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
