@@ -5,27 +5,18 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Question } from "../types/question";
+import {getAnswerFormatDisplay} from "../types/AnswerFormat.enum";
 
-function createData(
-    question: string,
-    url: string,
-    answerFormat: string,
-) {
-    return { question, url, answerFormat };
-}
-
-const rows = [
-    createData('Sample Question1', 'http://localhost:5173/', '一択'),
-    createData('Sample Question2', 'http://localhost:5173/', '一択'),
-    createData('Sample Question3', 'http://localhost:5173/', '一択'),
-    createData('Sample Question4', 'http://localhost:5173/', '一択'),
-    createData('Sample Question5', 'http://localhost:5173/', '一択'),
-    createData('Sample Question6', 'http://localhost:5173/', '一択'),
-];
-
-export default function TaskTable() {
+export default function TaskTable({
+    questions,
+    userId,
+}: {
+    questions: Question[] | undefined;
+    userId: number;
+}) {
     return (
-        <TableContainer component={Paper} sx={{ width: '80%', m: 'auto' }}>
+        <TableContainer component={Paper} sx={{ width: "80%", m: "auto" }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
@@ -36,9 +27,9 @@ export default function TaskTable() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {rows.map((row) => (
+                    {questions?.map((question) => (
                         <TableRow
-                            key={row.question}
+                            key={question.question}
                             sx={{
                                 "&:last-child td, &:last-child th": {
                                     border: 0,
@@ -46,10 +37,12 @@ export default function TaskTable() {
                             }}
                         >
                             <TableCell component="th" scope="row">
-                                {row.question}
+                                {question.question}
                             </TableCell>
-                            <TableCell align="right">{row.url}</TableCell>
-                            <TableCell align="right">{row.answerFormat}</TableCell>
+                            <TableCell align="right">{question.id}</TableCell>
+                            <TableCell align="right">
+                                {getAnswerFormatDisplay(question.answerFormat)}
+                            </TableCell>
                             <TableCell align="right"></TableCell>
                         </TableRow>
                     ))}
