@@ -1,10 +1,11 @@
 import Header from "./Header";
+import QuestionTable from "./QuestionTable";
 
 const Main = () => {
     return (
         <>
             <Header />
-            <div>Main</div>
+            <QuestionTable />
         </>
     );
 };
