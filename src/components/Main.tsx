@@ -7,6 +7,7 @@ import { Question } from "../types/question";
 import { GET_QUESTIONS } from "../queries/questionQueries";
 import { Stack, Typography } from "@mui/material";
 import Loading from "./Loading";
+import AddQuestion from "./AddQuestion";
 
 const Main = () => {
     const token = localStorage.getItem("token");
@@ -28,7 +29,7 @@ const Main = () => {
                 {error && <Typography color="red">Error</Typography>}
                 {!loading && !error && (
                     <>
-                        {/* <AddTask userId={userId} /> */}
+                        <AddQuestion />
                         <QuestionTable
                             questions={data?.getQuestionsByUser}
                             userId={userId}

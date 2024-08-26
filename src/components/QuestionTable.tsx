@@ -6,20 +6,17 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Question } from "../types/question";
-import { getAnswerFormatDisplay } from "../types/AnswerFormat.enum";
+import { getAnswerFormatDisplay } from "../types/answerFormat.enum";
 import { Link } from "react-router-dom";
 
 export default function TaskTable({
     questions,
-    // userId,
-}: {
+}: // userId,
+{
     questions: Question[] | undefined;
     userId: number;
 }) {
-
     const baseUrl = import.meta.env.VITE_BASE_URL;
-console.log(baseUrl);
-    
 
     return (
         <TableContainer component={Paper} sx={{ width: "80%", m: "auto" }}>
@@ -48,7 +45,9 @@ console.log(baseUrl);
                                 </Link>
                             </TableCell>
                             <TableCell align="right">
-                                <Link to={`/questions/answer-form/${question.id}`}>
+                                <Link
+                                    to={`/questions/answer-form/${question.id}`}
+                                >
                                     {`${baseUrl}/questions/answer-form/${question.id}`}
                                 </Link>
                             </TableCell>
