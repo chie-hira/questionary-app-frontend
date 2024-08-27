@@ -6,7 +6,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Question } from "../types/question";
-import { getAnswerFormatDisplay } from "../types/answerFormat.enum";
+import { getAnswerFormatDisplay } from "../types/answer";
 import { Link } from "react-router-dom";
 
 export default function TaskTable({

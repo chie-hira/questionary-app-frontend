@@ -9,6 +9,7 @@ import { ApolloProvider } from "@apollo/client";
 import client from "./apolloClient";
 import AnswerForm from "./components/AnswerForm";
 import AnswerResult from "./components/AnswerResult";
+import Notice from "./components/Notice";
 
 function App() {
     return (
@@ -35,6 +36,7 @@ function App() {
                         path="/questions/result/:id"
                         element={<AnswerResult />}
                     />
+                    <Route path="/notice" element={<Notice />} />
                     <Route path="*" element={<NotFound />} />
                 </Routes>
             </BrowserRouter>
