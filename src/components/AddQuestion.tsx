@@ -17,7 +17,7 @@ import {
 import {
     AnswerFormat,
     getAnswerFormatDisplay,
-} from "../types/answerFormat.enum";
+} from "../types/answer";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +38,7 @@ export default function AddQuestion({ userId }: { userId: number }) {
     const [isInvalidAnswerChoices, setIsInvalidAnswerChoices] = useState(false); // チェック用のフィールド
     const [confirmAnswerChoice, setConfirmAnswerChoice] = useState(false); // チェック用のフィールド
     const navigate = useNavigate();
-    const [createQuestion] = useMutation<{ createQuestion: Question[] }>(
+    const [createQuestion] = useMutation<{ createQuestion: Question }>(
         CREATE_QUESTION
     );
 
