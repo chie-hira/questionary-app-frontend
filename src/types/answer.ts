@@ -19,6 +19,14 @@ export type AnswerDetail = {
     answerChoice: AnswerChoice;
 };
 
+export type AggregatedAnswer = {
+    questionId: number;
+    question: string;
+    choiceId: number;
+    choice: string;
+    count: number;
+};
+
 export enum AnswerFormat {
   ONE_CHOICE = "ONE_CHOICE",
   MULTIPLE_CHOICE = "MULTIPLE_CHOICE",
