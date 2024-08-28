@@ -95,9 +95,7 @@ const AnswerForm = () => {
             return;
         }
 
-        console.log("respondentChoices", respondentChoices);
-
-        const createAnswerResultInput = { questionId: question?.id };
+        const createAnswerResultInput = { questionId: question?.id, description };
         const createAnswerDetailsInput = respondentChoices.map((choice) => ({
             answerChoiceId: choice,
         }));

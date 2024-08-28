@@ -83,13 +83,16 @@ function AnswerResult() {
         plotOptions: {
             bar: {
                 horizontal: false,
+                dataLabels: {
+                    position: "top",
+                },
             },
         },
         dataLabels: {
             enabled: true,
             formatter: function (val: number) {
                 const percentage = ((val / total) * 100).toFixed(2);
-                return `${val} (${percentage}%)`;
+                return `${val}(${percentage}%)`;
             },
             offsetY: -20,
             style: {
