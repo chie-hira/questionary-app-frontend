@@ -14,16 +14,13 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import {
-    AnswerFormat,
-    getAnswerFormatDisplay,
-} from "../types/answer";
+import { AnswerFormat, getAnswerFormatDisplay } from "../types/answer";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { Question } from "../types/question";
-import { CREATE_QUESTION } from "../mutations/createMutations";
+import { CREATE_QUESTION } from "../mutations/questionMutations";
 import { GET_QUESTIONS } from "../queries/questionQueries";
 import { useTheme } from "@mui/material/styles";
 
@@ -193,7 +190,11 @@ export default function AddQuestion({ userId }: { userId: number }) {
                     <>
                         <DialogTitle>回答作成</DialogTitle>
                         {isInvalidAnswerChoices && (
-                            <Typography fontSize={12} color={errorColor} sx={{ ml: 5 }}>
+                            <Typography
+                                fontSize={12}
+                                color={errorColor}
+                                sx={{ ml: 5 }}
+                            >
                                 回答選択肢は必須です
                             </Typography>
                         )}

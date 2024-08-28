@@ -23,10 +23,10 @@ import QuizIcon from "@mui/icons-material/Quiz";
 import Loading from "./Loading";
 import { AnswerFormat, getAnswerFormatSentence } from "../types/answer";
 import { Fragment, useEffect, useState } from "react";
-import { CREATE_ANSWER } from "../mutations/createMutations";
 import { AnswerResult } from "../types/answer";
 import { useAuth } from "../hooks/useAuth";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import {CREATE_ANSWER} from "../mutations/answerMutation";
 
 const AnswerForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -95,7 +95,10 @@ const AnswerForm = () => {
             return;
         }
 
-        const createAnswerResultInput = { questionId: question?.id, description };
+        const createAnswerResultInput = {
+            questionId: question?.id,
+            description,
+        };
         const createAnswerDetailsInput = respondentChoices.map((choice) => ({
             answerChoiceId: choice,
         }));
