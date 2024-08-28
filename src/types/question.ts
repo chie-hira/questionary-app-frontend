@@ -1,7 +1,7 @@
 import { AnswerChoice, AnswerFormat } from "./answer";
 
 export type Question = {
-    id: string;
+    id: number;
     question: string;
     answerFormat: AnswerFormat;
     answerChoices?: AnswerChoice[];

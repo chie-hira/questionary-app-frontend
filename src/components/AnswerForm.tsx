@@ -22,9 +22,11 @@ import {
 import QuizIcon from "@mui/icons-material/Quiz";
 import Loading from "./Loading";
 import { AnswerFormat, getAnswerFormatSentence } from "../types/answer";
-import { Fragment, useState } from "react";
-import { CREATE_ANSWER } from "../mutations/createMutations";
+import { Fragment, useEffect, useState } from "react";
 import { AnswerResult } from "../types/answer";
+import { useAuth } from "../hooks/useAuth";
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import {CREATE_ANSWER} from "../mutations/answerMutation";
 
 const AnswerForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -93,9 +95,10 @@ const AnswerForm = () => {
             return;
         }
 
-        console.log("respondentChoices", respondentChoices);
-
-        const createAnswerResultInput = { questionId: question?.id };
+        const createAnswerResultInput = {
+            questionId: question?.id,
+            description,
+        };
         const createAnswerDetailsInput = respondentChoices.map((choice) => ({
             answerChoiceId: choice,
         }));
@@ -113,12 +116,11 @@ const AnswerForm = () => {
                 },
             });
 
-            // resetState();
             navigate("/notice");
             return;
         } catch (error: unknown) {
             console.log(error);
-            
+
             if (
                 error instanceof Error &&
                 error.message ===
@@ -141,11 +143,24 @@ const AnswerForm = () => {
         });
     };
 
+    const handleBackMain = () => {
+        navigate("/");
+    };
+
+    const [authenticated, setAuthenticated] = useState(false);
+    const authInfo = useAuth();
+    useEffect(() => {
+        if (authInfo.isAuthenticated) {
+            setAuthenticated(true);
+        } else {
+            setAuthenticated(false);
+        }
+    }, [authInfo.isAuthenticated]);
+
     return (
         <Container maxWidth="sm" sx={{ pt: 5 }}>
             <Stack spacing={4} direction="column" m={8} alignItems="center">
                 <Box component="form" sx={{ mt: 1 }} minWidth={500}>
-                    {/* <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}> */}
                     <Typography component="h1" fontSize={18}>
                         回答者情報
                     </Typography>
@@ -304,7 +319,8 @@ const AnswerForm = () => {
                                             helperText={
                                                 question.answerFormat ===
                                                     AnswerFormat.DESCRIPTION &&
-                                                isInvalidDescription && description.length > 200
+                                                isInvalidDescription &&
+                                                description.length > 200
                                                     ? "200文字以内で回答してください"
                                                     : "必須です"
                                             }
@@ -322,6 +338,15 @@ const AnswerForm = () => {
                                 回答送信
                             </Button>
                         </Box>
+                    )}
+                    {authenticated && (
+                        <IconButton
+                            color="primary"
+                            aria-label="back to question list"
+                            onClick={handleBackMain}
+                        >
+                            <KeyboardBackspaceIcon />
+                        </IconButton>
                     )}
                 </Box>
             </Stack>

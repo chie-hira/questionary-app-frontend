@@ -8,11 +8,12 @@ import Paper from "@mui/material/Paper";
 import { Question } from "../types/question";
 import { getAnswerFormatDisplay } from "../types/answer";
 import { Link } from "react-router-dom";
+import DeleteQuestion from "./DeleteQuestion";
 
 export default function TaskTable({
     questions,
-}: // userId,
-{
+    userId,
+}: {
     questions: Question[] | undefined;
     userId: number;
 }) {
@@ -54,7 +55,9 @@ export default function TaskTable({
                             <TableCell align="right">
                                 {getAnswerFormatDisplay(question.answerFormat)}
                             </TableCell>
-                            <TableCell align="right"></TableCell>
+                            <TableCell align="right">
+                                <DeleteQuestion id={question.id} userId={userId} />
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
