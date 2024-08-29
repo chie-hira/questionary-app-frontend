@@ -42,8 +42,6 @@ const AnswerForm = () => {
     const [respondentEmail, setRespondentEmail] = useState("");
     const [respondentChoices, setRespondentChoices] = useState<number[]>([]);
     const [description, setQuestion] = useState("");
-    const [isInValidRespondentName, setIsInvalidRespondentName] =
-        useState(false);
     const [isInValidRespondentEmail, setIsInvalidRespondentEmail] =
         useState(false);
     const [isInvalidDescription, setIsInvalidDescription] = useState(false);
@@ -59,16 +57,10 @@ const AnswerForm = () => {
     const errorColor = theme.palette.error.main; // MUIのデフォルトのエラー色
 
     const handleSubmitAnswer = async () => {
-        setIsInvalidRespondentName(false);
         setIsInvalidRespondentEmail(false);
         setIsInvalidDescription(false);
         setIsInvalidAnswerChoices(false);
         let isValid = false;
-
-        if (respondentName.length === 0) {
-            setIsInvalidRespondentName(true);
-            isValid = true;
-        }
 
         if (respondentEmail.length === 0) {
             setIsInvalidRespondentEmail(true);
@@ -173,25 +165,21 @@ const AnswerForm = () => {
                                     fullWidth
                                     id="respondentName"
                                     label="氏名"
-                                    autoFocus
+                                    placeholder="任意で入力してください"
                                     value={respondentName}
                                     onChange={(e) =>
                                         setRespondentName(e.target.value)
-                                    }
-                                    error={isInValidRespondentName}
-                                    helperText={
-                                        isInValidRespondentName
-                                            ? "回答者の氏名は必須です"
-                                            : ""
                                     }
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    autoFocus
                                     required
                                     fullWidth
                                     id="respondentEmail"
                                     label="メールアドレス"
+                                    placeholder="必ず入力してください"
                                     name="respondentEmail"
                                     autoComplete="respondentEmail"
                                     value={respondentEmail}
