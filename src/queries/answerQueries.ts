@@ -1,19 +1,5 @@
 import { gql } from '@apollo/client';
 
-export const GET_ANSWER_DETAILS = gql`
-    query getAnswerDetailsByQuestionId($questionId: Int!) {
-        getAnswerDetailsByQuestionId(questionId: $questionId) {
-            id
-            question {
-              question
-            }
-            answerChoice{
-              answerChoice
-            }
-        }
-    }
-`;
-
 export const GET_AGGREGATE_ANSWER = gql`
     query getAggregatedAnswerByQuestionId($questionId: Int!) {
         getAggregatedAnswerByQuestionId(questionId: $questionId) {
@@ -22,6 +8,18 @@ export const GET_AGGREGATE_ANSWER = gql`
             choiceId
             choice
             count
+        }
+    }
+`;
+
+export const GET_DESCRIPTION_ANSWERS = gql`
+    query getDescriptionAnswersByQuestionId($questionId: Int!) {
+        getDescriptionAnswersByQuestionId(questionId: $questionId) {
+            id
+            description
+            question {
+                question
+            }
         }
     }
 `;

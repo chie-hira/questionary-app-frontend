@@ -7,9 +7,9 @@ import { Box, Container, Typography } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useNavigate } from "react-router-dom";
-import { GET_DESCRIPTION_ANSWERS } from "../queries/questionQueries";
 import { useQuery } from "@apollo/client";
 import { AnswerResult } from "../types/answer";
+import {GET_DESCRIPTION_ANSWERS} from "../queries/answerQueries";
 import Loading from "./Loading";
 
 function AnswerDescription({

@@ -49,7 +49,7 @@ function QuestionTable({
                                 <Link
                                     to={`/questions/answer-form/${question.id}`}
                                 >
-                                    {`${baseUrl}/questions/answer-form/${question.id}`}
+                                    {`${baseUrl}questions/answer-form/${question.id}`}
                                 </Link>
                             </TableCell>
                             <TableCell align="right">
