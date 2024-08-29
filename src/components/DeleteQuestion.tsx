@@ -5,7 +5,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { GET_QUESTIONS } from "../queries/questionQueries";
 import { DELETE_QUESTION } from "../mutations/questionMutations";
 
-function DeleteQuestion({ id, userId }: { id: number; userId: number }) {
+function DeleteQuestion({ id, userId }: { id: number; userId: number | null }) {
     const navigate = useNavigate();
     const [deleteQuestion] = useMutation<{ deleteQuestion: number }>(
         DELETE_QUESTION
