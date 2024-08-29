@@ -29,6 +29,9 @@ function AnswerChart({
     const handleBackMain = () => {
         navigate("/");
     };
+    const handleBackGuestMain = () => {
+        navigate("/guest");
+    };
 
     const { loading, data, error } = useQuery<{
         getAggregatedAnswerByQuestionId: AggregatedAnswer[];
@@ -48,6 +51,15 @@ function AnswerChart({
                         color="primary"
                         aria-label="back to question list"
                         onClick={handleBackMain}
+                    >
+                        <KeyboardBackspaceIcon />
+                    </IconButton>
+                )}
+                {!authenticated && (
+                    <IconButton
+                        color="primary"
+                        aria-label="back to question list"
+                        onClick={handleBackGuestMain}
                     >
                         <KeyboardBackspaceIcon />
                     </IconButton>
@@ -128,7 +140,7 @@ function AnswerChart({
                                 </IconButton>
                                 {question?.question}
                             </Typography>
-                            <Typography variant="h6" sx={{ pl:2 }}>
+                            <Typography variant="h6" sx={{ pl: 2 }}>
                                 回答者数: {countRespondents}名
                             </Typography>
                         </Stack>
@@ -143,6 +155,15 @@ function AnswerChart({
                             color="primary"
                             aria-label="back to question list"
                             onClick={handleBackMain}
+                        >
+                            <KeyboardBackspaceIcon />
+                        </IconButton>
+                    )}
+                    {!authenticated && (
+                        <IconButton
+                            color="primary"
+                            aria-label="back to question list"
+                            onClick={handleBackGuestMain}
                         >
                             <KeyboardBackspaceIcon />
                         </IconButton>

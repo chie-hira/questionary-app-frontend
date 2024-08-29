@@ -1,5 +1,15 @@
 import { gql } from "@apollo/client";
 
+export const GET_All_QUESTIONS = gql`
+    query getAllQuestions {
+        getAllQuestions {
+            id
+            question
+            answerFormat
+        }
+    }
+`;
+
 export const GET_QUESTIONS = gql`
     query getQuestionsByUser($userId: Int!) {
         getQuestionsByUser(userId: $userId) {

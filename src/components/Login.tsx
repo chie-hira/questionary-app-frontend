@@ -114,7 +114,12 @@ function SignIn() {
                         <Grid container>
                             <Grid item>
                                 <Link href="/signUp" variant="body2">
-                                    {"Don't have an account? Sign Up"}
+                                    {"すでにアカウントをお持ちの方はこちら"}
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="/guest" variant="body2">
+                                    {"ゲストユーザーはこちら"}
                                 </Link>
                             </Grid>
                         </Grid>

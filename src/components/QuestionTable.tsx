@@ -15,7 +15,7 @@ function QuestionTable({
     userId,
 }: {
     questions: Question[] | undefined;
-    userId: number;
+    userId: number | null;
 }) {
     const baseUrl = import.meta.env.VITE_BASE_URL;
 
@@ -55,9 +55,14 @@ function QuestionTable({
                             <TableCell align="right">
                                 {getAnswerFormatDisplay(question.answerFormat)}
                             </TableCell>
-                            <TableCell align="right">
-                                <DeleteQuestion id={question.id} userId={userId} />
-                            </TableCell>
+                            {userId !== null && (
+                                <TableCell align="right">
+                                    <DeleteQuestion
+                                        id={question.id}
+                                        userId={userId}
+                                    />
+                                </TableCell>
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>

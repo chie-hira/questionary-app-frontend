@@ -25,6 +25,9 @@ function AnswerDescription({
     const handleBackMain = () => {
         navigate("/");
     };
+    const handleBackGuestMain = () => {
+        navigate("/guest");
+    };
 
     const { loading, data, error } = useQuery<{
         getDescriptionAnswersByQuestionId: AnswerResult[];
@@ -95,6 +98,15 @@ function AnswerDescription({
                             color="primary"
                             aria-label="back to question list"
                             onClick={handleBackMain}
+                        >
+                            <KeyboardBackspaceIcon />
+                        </IconButton>
+                    )}
+                    {!authenticated && (
+                        <IconButton
+                            color="primary"
+                            aria-label="back to question list"
+                            onClick={handleBackGuestMain}
                         >
                             <KeyboardBackspaceIcon />
                         </IconButton>

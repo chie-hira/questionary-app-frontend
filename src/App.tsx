@@ -10,6 +10,7 @@ import client from "./apolloClient";
 import AnswerForm from "./components/AnswerForm";
 import AnswerResult from "./components/AnswerResult";
 import Notice from "./components/Notice";
+import GuestMain from "./components/GuestMain";
 
 function App() {
     return (
@@ -27,6 +28,10 @@ function App() {
                     <Route
                         path="/"
                         element={<PrivateRoute children={<Main />} />}
+                    />
+                    <Route
+                        path="/guest"
+                        element={<GuestMain />}
                     />
                     <Route
                         path="/questions/answer-form/:id"
