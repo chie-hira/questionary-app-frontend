@@ -12,6 +12,12 @@ const DeleteQuestion = ({ id, userId }: { id: number; userId: number }) => {
     );
 
     const handleDeleteQuestion = async () => {
+        const confirmed = window.confirm("本当にこの質問を削除しますか？");
+
+        if (!confirmed) {
+            return; 
+        }
+        
         try {
             await deleteQuestion({
                 variables: { id },
