@@ -157,9 +157,11 @@ export default function AddQuestion({ userId }: { userId: number }) {
                         rows={4}
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        error={isInvalidQuestion}
+                        error={isInvalidQuestion && question === ""}
                         helperText={
-                            isInvalidQuestion ? "質問内容は必須です" : ""
+                            isInvalidQuestion && question === ""
+                                ? "質問内容は必須です"
+                                : ""
                         }
                     />
 

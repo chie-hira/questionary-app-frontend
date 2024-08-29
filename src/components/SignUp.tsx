@@ -14,7 +14,7 @@ import { User } from "../types/user";
 import { useMutation } from "@apollo/client";
 import { LOGIN, SIGN_UP } from "../mutations/authMutations";
 import { useNavigate } from "react-router-dom";
-import {LoginResponse} from "../types/loginResponse";
+import { LoginResponse } from "../types/loginResponse";
 
 const defaultTheme = createTheme();
 
@@ -26,9 +26,39 @@ export default function SignUp() {
     const [login] = useMutation<LoginResponse>(LOGIN);
     const navigate = useNavigate();
 
+    /* 
+    * カスタムフックでバリデーション
+    * emailの入力patternチェック, passwordの文字数チェックは未実装
+    * 中規模,大規模なプロジェクト、複雑なフォームには Formik + Yup または React Hook Form が有効
+    */
+    const [isInValidName, setIsInValidName] = useState(false);
+    const [isInValidEmail, setIsInValidEmail] = useState(false);
+    const [isInValidPassword, setIsInValidPassword] = useState(false);
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const signUpInput = { name, email, password };
+
+        let isValid = true;
+
+        if (name.length === 0) {
+            setIsInValidName(true);
+            isValid = false;
+        }
+
+        if (email.length === 0) {
+            setIsInValidEmail(true);
+            isValid = false;
+        }
+
+        if (password.length === 0) {
+            setIsInValidPassword(true);
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return;
+        }
 
         try {
             const signUpResult = await signUp({
@@ -105,6 +135,12 @@ export default function SignUp() {
                                     autoFocus
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+                                    error={isInValidName && name === ""}
+                                    helperText={
+                                        isInValidName && name === ""
+                                            ? "名前は必須です"
+                                            : ""
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -117,6 +153,12 @@ export default function SignUp() {
                                     autoComplete="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    error={isInValidEmail}
+                                    helperText={
+                                        isInValidEmail
+                                            ? "メールアドレスは必須です"
+                                            : ""
+                                    }
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -132,6 +174,12 @@ export default function SignUp() {
                                     onChange={(e) =>
                                         setPassword(e.target.value)
                                     }
+                                    error={isInValidPassword}
+                                    helperText={
+                                        isInValidPassword
+                                            ? "パスワードは必須です"
+                                            : ""
+                                    }
                                 />
                             </Grid>
                         </Grid>
@@ -145,7 +193,7 @@ export default function SignUp() {
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>
-                                <Link href="/signin" variant="body2">
+                                <Link href="/login" variant="body2">
                                     Already have an account? Sign in
                                 </Link>
                             </Grid>

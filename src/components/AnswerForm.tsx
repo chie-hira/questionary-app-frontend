@@ -171,6 +171,7 @@ const AnswerForm = () => {
         navigate("/");
     };
 
+    /* ********** 戻るボタンの表示切替のためのログイン状態確認 ********** */
     const [authenticated, setAuthenticated] = useState(false);
     const authInfo = useAuth();
     useEffect(() => {
