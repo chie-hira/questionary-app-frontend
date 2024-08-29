@@ -1,7 +1,7 @@
 import {Box, CircularProgress} from "@mui/material";
 
 
-const Loading = () => {
+function Loading() {
     return (
         <Box>
             <CircularProgress />

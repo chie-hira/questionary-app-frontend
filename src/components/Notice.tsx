@@ -1,6 +1,6 @@
 import { Alert, AlertTitle, Container } from "@mui/material";
 
-const Notice = () => {
+function Notice() {
     return (
         <Container maxWidth="sm" sx={{ mt: 20 }}>
             <Alert severity="success">

@@ -5,6 +5,7 @@ export type AnswerResult = {
     id: number;
     question: Question;
     respondent: Respondent;
+    description: string;
     answerDetails: AnswerDetail[];
 };
 

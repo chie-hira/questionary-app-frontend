@@ -1,7 +1,6 @@
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_QUESTION } from "../queries/questionQueries";
-import { Question } from "../types/question";
 import {
     Box,
     Button,
@@ -20,15 +19,24 @@ import {
     useTheme,
 } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
-import Loading from "./Loading";
-import { AnswerFormat, getAnswerFormatSentence } from "../types/answer";
-import { Fragment, useEffect, useState } from "react";
-import { AnswerResult } from "../types/answer";
-import { useAuth } from "../hooks/useAuth";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import {CREATE_ANSWER} from "../mutations/answerMutation";
+import { CREATE_ANSWER } from "../mutations/answerMutation";
+import {
+    AnswerFormat,
+    AnswerResult,
+    getAnswerFormatSentence,
+} from "../types/answer";
+import { Question } from "../types/question";
+import { useAuth } from "../hooks/useAuth";
+import { GET_QUESTION } from "../queries/questionQueries";
+import Loading from "./Loading";
 
-const AnswerForm = () => {
+const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+export default function AnswerForm() {
     const { id } = useParams<{ id: string }>();
     const parsedId = id ? parseInt(id, 10) : null;
     const { loading, data, error } = useQuery<{
@@ -42,13 +50,12 @@ const AnswerForm = () => {
     const [respondentEmail, setRespondentEmail] = useState("");
     const [respondentChoices, setRespondentChoices] = useState<number[]>([]);
     const [description, setQuestion] = useState("");
-    const [isInValidRespondentName, setIsInvalidRespondentName] =
-        useState(false);
-    const [isInValidRespondentEmail, setIsInvalidRespondentEmail] =
-        useState(false);
     const [isInvalidDescription, setIsInvalidDescription] = useState(false);
     const [isInvalidRespondentChoices, setIsInvalidAnswerChoices] =
         useState(false);
+    const [isInValidRespondentEmail, setIsInvalidRespondentEmail] =
+        useState(false);
+    const [emailErrorText, setEmailErrorText] = useState("");
     const navigate = useNavigate();
 
     const [createAnswer] = useMutation<{ createAnswer: AnswerResult }>(
@@ -59,18 +66,18 @@ const AnswerForm = () => {
     const errorColor = theme.palette.error.main; // MUIのデフォルトのエラー色
 
     const handleSubmitAnswer = async () => {
-        setIsInvalidRespondentName(false);
         setIsInvalidRespondentEmail(false);
         setIsInvalidDescription(false);
         setIsInvalidAnswerChoices(false);
         let isValid = false;
 
-        if (respondentName.length === 0) {
-            setIsInvalidRespondentName(true);
+        if (respondentEmail.length === 0) {
+            setIsInvalidRespondentEmail(true);
+            setEmailErrorText("回答者のメールアドレスは必須です");
             isValid = true;
         }
 
-        if (respondentEmail.length === 0) {
+        if (!validateEmail(respondentEmail)) {
             setIsInvalidRespondentEmail(true);
             isValid = true;
         }
@@ -133,6 +140,24 @@ const AnswerForm = () => {
         }
     };
 
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const email = e.target.value;
+        setRespondentEmail(email);
+        setIsInvalidRespondentEmail(!validateEmail(email));
+
+        if (validateEmail(email)) {
+            setEmailErrorText("");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            setEmailErrorText("無効なアドレスです");
+        }
+        if (email === "") {
+            setEmailErrorText("回答者のメールアドレスは必須です");
+        }
+    };
+
     const handleCheckboxChange = (id: number) => {
         setRespondentChoices((prevChoices) => {
             if (prevChoices.includes(id)) {
@@ -147,6 +172,7 @@ const AnswerForm = () => {
         navigate("/");
     };
 
+    /* ********** 戻るボタンの表示切替のためのログイン状態確認 ********** */
     const [authenticated, setAuthenticated] = useState(false);
     const authInfo = useAuth();
     useEffect(() => {
@@ -173,35 +199,29 @@ const AnswerForm = () => {
                                     fullWidth
                                     id="respondentName"
                                     label="氏名"
-                                    autoFocus
+                                    placeholder="任意で入力してください"
                                     value={respondentName}
                                     onChange={(e) =>
                                         setRespondentName(e.target.value)
-                                    }
-                                    error={isInValidRespondentName}
-                                    helperText={
-                                        isInValidRespondentName
-                                            ? "回答者の氏名は必須です"
-                                            : ""
                                     }
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    autoFocus
                                     required
                                     fullWidth
                                     id="respondentEmail"
                                     label="メールアドレス"
+                                    placeholder="必ず入力してください"
                                     name="respondentEmail"
                                     autoComplete="respondentEmail"
                                     value={respondentEmail}
-                                    onChange={(e) =>
-                                        setRespondentEmail(e.target.value)
-                                    }
+                                    onChange={handleEmailChange}
                                     error={isInValidRespondentEmail}
                                     helperText={
                                         isInValidRespondentEmail
-                                            ? "回答者のメールアドレスは必須です"
+                                            ? emailErrorText
                                             : ""
                                     }
                                 />
@@ -352,6 +372,4 @@ const AnswerForm = () => {
             </Stack>
         </Container>
     );
-};
-
-export default AnswerForm;
+}

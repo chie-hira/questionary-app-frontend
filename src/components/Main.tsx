@@ -9,7 +9,7 @@ import { Stack, Typography } from "@mui/material";
 import Loading from "./Loading";
 import AddQuestion from "./AddQuestion";
 
-const Main = () => {
+function Main() {
     const token = localStorage.getItem("token");
     const decodedToken = jwtDecode<Payload>(token!);
     const userId = decodedToken.sub;

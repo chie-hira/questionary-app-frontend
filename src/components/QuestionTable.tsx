@@ -10,7 +10,7 @@ import { getAnswerFormatDisplay } from "../types/answer";
 import { Link } from "react-router-dom";
 import DeleteQuestion from "./DeleteQuestion";
 
-export default function TaskTable({
+function QuestionTable({
     questions,
     userId,
 }: {
@@ -65,3 +65,5 @@ export default function TaskTable({
         </TableContainer>
     );
 }
+
+export default QuestionTable;

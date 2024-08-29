@@ -10,14 +10,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LoginResponse } from "../types/loginResponse";
 import { LOGIN } from "../mutations/authMutations";
-import { useNavigate } from "react-router-dom";
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
+function SignIn() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [failLogin, setFalLogin] = useState(false);
@@ -30,7 +30,7 @@ export default function SignIn() {
 
         try {
             const result = await login({ variables: { loginInput } });
-            
+
             if (result.data) {
                 localStorage.setItem("token", result.data.login.accessToken);
             }
@@ -124,3 +124,5 @@ export default function SignIn() {
         </ThemeProvider>
     );
 }
+
+export default SignIn;
