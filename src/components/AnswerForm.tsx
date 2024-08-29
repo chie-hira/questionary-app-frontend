@@ -26,7 +26,7 @@ import { Fragment, useEffect, useState } from "react";
 import { AnswerResult } from "../types/answer";
 import { useAuth } from "../hooks/useAuth";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import {CREATE_ANSWER} from "../mutations/answerMutation";
+import { CREATE_ANSWER } from "../mutations/answerMutation";
 
 const AnswerForm = () => {
     const { id } = useParams<{ id: string }>();
@@ -42,11 +42,12 @@ const AnswerForm = () => {
     const [respondentEmail, setRespondentEmail] = useState("");
     const [respondentChoices, setRespondentChoices] = useState<number[]>([]);
     const [description, setQuestion] = useState("");
-    const [isInValidRespondentEmail, setIsInvalidRespondentEmail] =
-        useState(false);
     const [isInvalidDescription, setIsInvalidDescription] = useState(false);
     const [isInvalidRespondentChoices, setIsInvalidAnswerChoices] =
         useState(false);
+    const [isInValidRespondentEmail, setIsInvalidRespondentEmail] =
+        useState(false);
+    const [emailErrorText, setEmailErrorText] = useState("");
     const navigate = useNavigate();
 
     const [createAnswer] = useMutation<{ createAnswer: AnswerResult }>(
@@ -63,6 +64,12 @@ const AnswerForm = () => {
         let isValid = false;
 
         if (respondentEmail.length === 0) {
+            setIsInvalidRespondentEmail(true);
+            setEmailErrorText("回答者のメールアドレスは必須です");
+            isValid = true;
+        }
+
+        if (!validateEmail(respondentEmail)) {
             setIsInvalidRespondentEmail(true);
             isValid = true;
         }
@@ -125,6 +132,31 @@ const AnswerForm = () => {
         }
     };
 
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const email = e.target.value;
+        setRespondentEmail(email);
+        setIsInvalidRespondentEmail(!validateEmail(email));
+        
+
+        if (validateEmail(email)) {
+            setEmailErrorText("");
+            return;
+        }
+
+        if (!validateEmail(email)) {
+            setEmailErrorText("無効なアドレスです");
+        }
+        if (email === "") {
+            setEmailErrorText("回答者のメールアドレスは必須です");
+        }
+    };
+    
+
     const handleCheckboxChange = (id: number) => {
         setRespondentChoices((prevChoices) => {
             if (prevChoices.includes(id)) {
@@ -183,15 +215,9 @@ const AnswerForm = () => {
                                     name="respondentEmail"
                                     autoComplete="respondentEmail"
                                     value={respondentEmail}
-                                    onChange={(e) =>
-                                        setRespondentEmail(e.target.value)
-                                    }
+                                    onChange={handleEmailChange}
                                     error={isInValidRespondentEmail}
-                                    helperText={
-                                        isInValidRespondentEmail
-                                            ? "回答者のメールアドレスは必須です"
-                                            : ""
-                                    }
+                                    helperText={isInValidRespondentEmail ? emailErrorText : ""}
                                 />
                             </Grid>
                         </Grid>
