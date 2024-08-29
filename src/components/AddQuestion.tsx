@@ -14,26 +14,29 @@ import {
     Stack,
     Typography,
 } from "@mui/material";
-import { AnswerFormat, getAnswerFormatDisplay } from "../types/answer";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
+import { AnswerFormat, getAnswerFormatDisplay } from "../types/answer";
 import { Question } from "../types/question";
 import { CREATE_QUESTION } from "../mutations/questionMutations";
 import { GET_QUESTIONS } from "../queries/questionQueries";
-import { useTheme } from "@mui/material/styles";
 
-export default function AddQuestion({ userId }: { userId: number }) {
+const answerFormats = Object.values(AnswerFormat);
+
+function AddQuestion({ userId }: { userId: number }) {
     const [open, setOpen] = useState(false);
     const [question, setQuestion] = useState("");
     const [answerFormat, setAnswerFormat] = useState(AnswerFormat.ONE_CHOICE);
     const [answerChoices, setAnswerChoices] = useState<string[]>([""]);
-    const answerFormats = Object.values(AnswerFormat);
 
-    const [isInvalidQuestion, setIsInvalidQuestion] = useState(false); // チェック用のフィールド
-    const [isInvalidAnswerChoices, setIsInvalidAnswerChoices] = useState(false); // チェック用のフィールド
-    const [confirmAnswerChoice, setConfirmAnswerChoice] = useState(false); // チェック用のフィールド
+    // チェック用のフィールド
+    const [isInvalidQuestion, setIsInvalidQuestion] = useState(false);
+    const [isInvalidAnswerChoices, setIsInvalidAnswerChoices] = useState(false);
+    const [confirmAnswerChoice, setConfirmAnswerChoice] = useState(false);
+
     const navigate = useNavigate();
     const [createQuestion] = useMutation<{ createQuestion: Question }>(
         CREATE_QUESTION
@@ -263,3 +266,5 @@ export default function AddQuestion({ userId }: { userId: number }) {
         </div>
     );
 }
+
+export default AddQuestion;

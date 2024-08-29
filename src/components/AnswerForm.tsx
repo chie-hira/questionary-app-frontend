@@ -1,7 +1,6 @@
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "@apollo/client";
-import { GET_QUESTION } from "../queries/questionQueries";
-import { Question } from "../types/question";
 import {
     Box,
     Button,
@@ -20,15 +19,24 @@ import {
     useTheme,
 } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
-import Loading from "./Loading";
-import { AnswerFormat, getAnswerFormatSentence } from "../types/answer";
-import { Fragment, useEffect, useState } from "react";
-import { AnswerResult } from "../types/answer";
-import { useAuth } from "../hooks/useAuth";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { CREATE_ANSWER } from "../mutations/answerMutation";
+import {
+    AnswerFormat,
+    AnswerResult,
+    getAnswerFormatSentence,
+} from "../types/answer";
+import { Question } from "../types/question";
+import { useAuth } from "../hooks/useAuth";
+import { GET_QUESTION } from "../queries/questionQueries";
+import Loading from "./Loading";
 
-const AnswerForm = () => {
+const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
+export default function AnswerForm() {
     const { id } = useParams<{ id: string }>();
     const parsedId = id ? parseInt(id, 10) : null;
     const { loading, data, error } = useQuery<{
@@ -132,16 +140,10 @@ const AnswerForm = () => {
         }
     };
 
-    const validateEmail = (email: string) => {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
-    };
-
     const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const email = e.target.value;
         setRespondentEmail(email);
         setIsInvalidRespondentEmail(!validateEmail(email));
-        
 
         if (validateEmail(email)) {
             setEmailErrorText("");
@@ -155,7 +157,6 @@ const AnswerForm = () => {
             setEmailErrorText("回答者のメールアドレスは必須です");
         }
     };
-    
 
     const handleCheckboxChange = (id: number) => {
         setRespondentChoices((prevChoices) => {
@@ -218,7 +219,11 @@ const AnswerForm = () => {
                                     value={respondentEmail}
                                     onChange={handleEmailChange}
                                     error={isInValidRespondentEmail}
-                                    helperText={isInValidRespondentEmail ? emailErrorText : ""}
+                                    helperText={
+                                        isInValidRespondentEmail
+                                            ? emailErrorText
+                                            : ""
+                                    }
                                 />
                             </Grid>
                         </Grid>
@@ -367,6 +372,4 @@ const AnswerForm = () => {
             </Stack>
         </Container>
     );
-};
-
-export default AnswerForm;
+}

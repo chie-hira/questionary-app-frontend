@@ -18,7 +18,7 @@ import { LoginResponse } from "../types/loginResponse";
 
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+function SignUp() {
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -26,11 +26,11 @@ export default function SignUp() {
     const [login] = useMutation<LoginResponse>(LOGIN);
     const navigate = useNavigate();
 
-    /* 
-    * カスタムフックでバリデーション
-    * emailの入力patternチェック, passwordの文字数チェックは未実装
-    * 中規模,大規模なプロジェクト、複雑なフォームには Formik + Yup または React Hook Form が有効
-    */
+    /*
+     * カスタムフックでバリデーション
+     * emailの入力patternチェック, passwordの文字数チェックは未実装
+     * 中規模,大規模なプロジェクト、複雑なフォームには Formik + Yup または React Hook Form が有効
+     */
     const [isInValidName, setIsInValidName] = useState(false);
     const [isInValidEmail, setIsInValidEmail] = useState(false);
     const [isInValidPassword, setIsInValidPassword] = useState(false);
@@ -204,3 +204,5 @@ export default function SignUp() {
         </ThemeProvider>
     );
 }
+
+export default SignUp;

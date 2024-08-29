@@ -1,11 +1,11 @@
 import { useMutation } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
 import { GET_QUESTIONS } from "../queries/questionQueries";
-import { useNavigate } from "react-router-dom";
 import { DELETE_QUESTION } from "../mutations/questionMutations";
 
-const DeleteQuestion = ({ id, userId }: { id: number; userId: number }) => {
+function DeleteQuestion({ id, userId }: { id: number; userId: number }) {
     const navigate = useNavigate();
     const [deleteQuestion] = useMutation<{ deleteQuestion: number }>(
         DELETE_QUESTION
@@ -15,9 +15,9 @@ const DeleteQuestion = ({ id, userId }: { id: number; userId: number }) => {
         const confirmed = window.confirm("本当にこの質問を削除しますか？");
 
         if (!confirmed) {
-            return; 
+            return;
         }
-        
+
         try {
             await deleteQuestion({
                 variables: { id },
@@ -46,6 +46,6 @@ const DeleteQuestion = ({ id, userId }: { id: number; userId: number }) => {
             </Tooltip>
         </div>
     );
-};
+}
 
 export default DeleteQuestion;
