@@ -3,20 +3,22 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import CommentIcon from "@mui/icons-material/Comment";
 import IconButton from "@mui/material/IconButton";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { AnswerResult } from "../types/answer";
-import {GET_DESCRIPTION_ANSWERS} from "../queries/answerQueries";
+import { GET_DESCRIPTION_ANSWERS } from "../queries/answerQueries";
 import Loading from "./Loading";
 
 function AnswerDescription({
     authenticated,
+    countRespondents,
     parsedId,
 }: {
     authenticated: boolean;
+    countRespondents: number;
     parsedId: number | null;
 }) {
     const navigate = useNavigate();
@@ -49,15 +51,20 @@ function AnswerDescription({
                             height: "100%",
                         }}
                     >
-                        <Typography id="select">
-                            <IconButton
-                                color="primary"
-                                aria-label="remove answer choice"
-                            >
-                                <QuizIcon />
-                            </IconButton>
-                            {descriptionAnswers?.[0].question.question}
-                        </Typography>
+                        <Stack direction="column" spacing={2}>
+                            <Typography id="select">
+                                <IconButton
+                                    color="primary"
+                                    aria-label="remove answer choice"
+                                >
+                                    <QuizIcon />
+                                </IconButton>
+                                {descriptionAnswers?.[0].question.question}
+                            </Typography>
+                            <Typography variant="h6" sx={{ pl: 2 }}>
+                                回答者数: {countRespondents}名
+                            </Typography>
+                        </Stack>
                     </Box>
                     <List
                         sx={{
@@ -67,7 +74,10 @@ function AnswerDescription({
                     >
                         {descriptionAnswers?.map((answer) => (
                             <ListItem key={answer.id} disableGutters>
-                                <IconButton aria-label="comment" color="default">
+                                <IconButton
+                                    aria-label="comment"
+                                    color="default"
+                                >
                                     <CommentIcon />
                                 </IconButton>
                                 <ListItemText

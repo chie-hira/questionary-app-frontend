@@ -9,6 +9,7 @@ import AnswerChart from "./AnswerChart";
 import AnswerDescription from "./AnswerDescription";
 import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
+import { GET_COUNT_ANSWER_RESPONDENTS } from "../queries/answerQueries";
 
 function AnswerResult() {
     const [authenticated, setAuthenticated] = useState(false);
@@ -35,21 +36,51 @@ function AnswerResult() {
         variables: { id: parsedId },
     });
 
+    const {
+        loading: countRespondentLoading,
+        data: countRespondentData,
+        error: countRespondentError,
+    } = useQuery<{
+        countAnswerRespondentsByQuestionId: number;
+    }>(GET_COUNT_ANSWER_RESPONDENTS, {
+        variables: { questionId: parsedId },
+    });
+
+    console.log(countRespondentData?.countAnswerRespondentsByQuestionId);
+
     const answerFormat = questionData?.getQuestionById.answerFormat;
+    const countRespondents =
+        countRespondentData?.countAnswerRespondentsByQuestionId
+            ? countRespondentData.countAnswerRespondentsByQuestionId
+            : 0;
 
     return (
         <>
-            {questionLoading && <Loading />}
-            {questionError && <Typography color="red">Error</Typography>}
+            {questionLoading && countRespondentLoading && <Loading />}
+            {questionError && countRespondentError && (
+                <Typography color="red">Error</Typography>
+            )}
             {!questionLoading &&
+                !countRespondentLoading &&
                 !questionError &&
+                !countRespondentError &&
                 answerFormat !== AnswerFormat.DESCRIPTION && (
-                    <AnswerChart authenticated={authenticated} parsedId={parsedId} />
+                    <AnswerChart
+                        authenticated={authenticated}
+                        countRespondents={countRespondents}
+                        parsedId={parsedId}
+                    />
                 )}
             {!questionLoading &&
+                !countRespondentLoading &&
                 !questionError &&
+                !countRespondentError &&
                 answerFormat === AnswerFormat.DESCRIPTION && (
-                    <AnswerDescription authenticated={authenticated} parsedId={parsedId} />
+                    <AnswerDescription
+                        authenticated={authenticated}
+                        countRespondents={countRespondents}
+                        parsedId={parsedId}
+                    />
                 )}
         </>
     );

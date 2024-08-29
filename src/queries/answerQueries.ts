@@ -1,5 +1,11 @@
 import { gql } from '@apollo/client';
 
+export const GET_COUNT_ANSWER_RESPONDENTS = gql`
+    query countAnswerRespondentsByQuestionId($questionId: Int!) {
+        countAnswerRespondentsByQuestionId(questionId: $questionId)
+    }
+`;
+
 export const GET_AGGREGATE_ANSWER = gql`
     query getAggregatedAnswerByQuestionId($questionId: Int!) {
         getAggregatedAnswerByQuestionId(questionId: $questionId) {

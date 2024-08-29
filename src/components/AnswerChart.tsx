@@ -9,6 +9,7 @@ import {
     Box,
     Container,
     IconButton,
+    Stack,
     Typography,
 } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
@@ -17,9 +18,11 @@ import Loading from "./Loading";
 
 function AnswerChart({
     authenticated,
+    countRespondents,
     parsedId,
 }: {
     authenticated: boolean;
+    countRespondents: number;
     parsedId: number | null;
 }) {
     const navigate = useNavigate();
@@ -115,15 +118,20 @@ function AnswerChart({
                             height: "100%",
                         }}
                     >
-                        <Typography id="select">
-                            <IconButton
-                                color="primary"
-                                aria-label="remove answer choice"
-                            >
-                                <QuizIcon />
-                            </IconButton>
-                            {question?.question}
-                        </Typography>
+                        <Stack direction="column" spacing={2}>
+                            <Typography id="select">
+                                <IconButton
+                                    color="primary"
+                                    aria-label="remove answer choice"
+                                >
+                                    <QuizIcon />
+                                </IconButton>
+                                {question?.question}
+                            </Typography>
+                            <Typography variant="h6" sx={{ pl:2 }}>
+                                回答者数: {countRespondents}名
+                            </Typography>
+                        </Stack>
                     </Box>
                     <ReactApexChart
                         options={options}
