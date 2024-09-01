@@ -20,7 +20,7 @@ function QuestionTable({
     const baseUrl = import.meta.env.VITE_BASE_URL;
 
     return (
-        <TableContainer component={Paper} sx={{ width: "80%", m: "auto" }}>
+        <TableContainer component={Paper} sx={{ width: "100%", m: "auto" }}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>

@@ -11,6 +11,7 @@ import AnswerForm from "./components/AnswerForm";
 import AnswerResult from "./components/AnswerResult";
 import Notice from "./components/Notice";
 import GuestMain from "./components/GuestMain";
+import AdminMain from "./components/AdminMain";
 
 function App() {
     return (
@@ -27,7 +28,11 @@ function App() {
                     />
                     <Route
                         path="/"
-                        element={<PrivateRoute children={<Main />} />}
+                        element={<Main />}
+                    />
+                    <Route
+                        path="/admin"
+                        element={<PrivateRoute children={<AdminMain />} />}
                     />
                     <Route
                         path="/guest"

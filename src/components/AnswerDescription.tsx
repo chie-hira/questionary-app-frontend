@@ -16,14 +16,16 @@ function AnswerDescription({
     authenticated,
     countRespondents,
     parsedId,
+    question,
 }: {
     authenticated: boolean;
     countRespondents: number;
     parsedId: number | null;
+    question: string | undefined;
 }) {
     const navigate = useNavigate();
     const handleBackMain = () => {
-        navigate("/");
+        navigate("/admin");
     };
     const handleBackGuestMain = () => {
         navigate("/guest");
@@ -43,7 +45,7 @@ function AnswerDescription({
             {error && <Typography color="red">Error</Typography>}
             {!loading && !error && (
                 <Container maxWidth="sm" sx={{ pt: 5 }}>
-                    <Typography variant="h4" align="center" gutterBottom>
+                    <Typography variant="h5" align="center" sx={{ mb:2 }}>
                         アンケート結果
                     </Typography>
                     <Box
@@ -62,7 +64,7 @@ function AnswerDescription({
                                 >
                                     <QuizIcon />
                                 </IconButton>
-                                {descriptionAnswers?.[0].question.question}
+                                {question}
                             </Typography>
                             <Typography variant="h6" sx={{ pl: 2 }}>
                                 回答者数: {countRespondents}名
@@ -94,23 +96,53 @@ function AnswerDescription({
                         ))}
                     </List>
                     {authenticated && (
-                        <IconButton
-                            color="primary"
-                            aria-label="back to question list"
+                        <Stack
+                            spacing={0}
+                            direction="row"
                             onClick={handleBackMain}
                         >
-                            <KeyboardBackspaceIcon />
-                        </IconButton>
+                            <IconButton
+                                color="primary"
+                                aria-label="back to question list"
+                            >
+                                <KeyboardBackspaceIcon />
+                            </IconButton>
+                            <Typography
+                                variant="body2"
+                                color="primary"
+                                sx={{
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                管理画面
+                            </Typography>
+                        </Stack>
                     )}
-                    {!authenticated && (
+                    <Stack
+                        spacing={0}
+                        direction="row"
+                        onClick={handleBackGuestMain}
+                    >
                         <IconButton
                             color="primary"
                             aria-label="back to question list"
-                            onClick={handleBackGuestMain}
                         >
                             <KeyboardBackspaceIcon />
                         </IconButton>
-                    )}
+                        <Typography
+                            variant="body2"
+                            color="primary"
+                            sx={{
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            アンケート一覧
+                        </Typography>
+                    </Stack>
                 </Container>
             )}
         </Container>

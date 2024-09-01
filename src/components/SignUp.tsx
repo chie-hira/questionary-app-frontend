@@ -15,6 +15,7 @@ import { useMutation } from "@apollo/client";
 import { LOGIN, SIGN_UP } from "../mutations/authMutations";
 import { useNavigate } from "react-router-dom";
 import { LoginResponse } from "../types/loginResponse";
+import Header from "./Header";
 
 const defaultTheme = createTheme();
 
@@ -83,7 +84,7 @@ function SignUp() {
             }
 
             if (localStorage.getItem("token")) {
-                navigate("/");
+                navigate("/admin");
             }
         } catch (error) {
             if (error instanceof Error) {
@@ -101,6 +102,7 @@ function SignUp() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <Header />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box

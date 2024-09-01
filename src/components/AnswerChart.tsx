@@ -3,15 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_AGGREGATE_ANSWER } from "../queries/answerQueries";
 import { AggregatedAnswer } from "../types/answer";
-import {
-    Alert,
-    AlertTitle,
-    Box,
-    Container,
-    IconButton,
-    Stack,
-    Typography,
-} from "@mui/material";
+import { Box, Container, IconButton, Stack, Typography } from "@mui/material";
 import QuizIcon from "@mui/icons-material/Quiz";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Loading from "./Loading";
@@ -27,7 +19,7 @@ function AnswerChart({
 }) {
     const navigate = useNavigate();
     const handleBackMain = () => {
-        navigate("/");
+        navigate("/admin");
     };
     const handleBackGuestMain = () => {
         navigate("/guest");
@@ -38,35 +30,6 @@ function AnswerChart({
     }>(GET_AGGREGATE_ANSWER, {
         variables: { questionId: parsedId },
     });
-
-    if (data?.getAggregatedAnswerByQuestionId.length === 0) {
-        return (
-            <Container maxWidth="sm" sx={{ mt: 20 }}>
-                <Alert severity="info" sx={{ mb: 2 }}>
-                    <AlertTitle>Info</AlertTitle>
-                    まだ回答がありません。
-                </Alert>
-                {authenticated && (
-                    <IconButton
-                        color="primary"
-                        aria-label="back to question list"
-                        onClick={handleBackMain}
-                    >
-                        <KeyboardBackspaceIcon />
-                    </IconButton>
-                )}
-                {!authenticated && (
-                    <IconButton
-                        color="primary"
-                        aria-label="back to question list"
-                        onClick={handleBackGuestMain}
-                    >
-                        <KeyboardBackspaceIcon />
-                    </IconButton>
-                )}
-            </Container>
-        );
-    }
 
     const aggregatedAnswers = data?.getAggregatedAnswerByQuestionId;
     const question = aggregatedAnswers?.[0];
@@ -119,7 +82,7 @@ function AnswerChart({
             {error && <Typography color="red">Error</Typography>}
             {!loading && !error && (
                 <Container maxWidth="sm" sx={{ pt: 5 }}>
-                    <Typography variant="h4" align="center" gutterBottom>
+                    <Typography variant="h5" align="center" sx={{ mb:2 }}>
                         アンケート結果
                     </Typography>
                     <Box
@@ -151,23 +114,53 @@ function AnswerChart({
                         series={series}
                     />
                     {authenticated && (
-                        <IconButton
-                            color="primary"
-                            aria-label="back to question list"
+                        <Stack
+                            spacing={0}
+                            direction="row"
                             onClick={handleBackMain}
                         >
-                            <KeyboardBackspaceIcon />
-                        </IconButton>
+                            <IconButton
+                                color="primary"
+                                aria-label="back to question list"
+                            >
+                                <KeyboardBackspaceIcon />
+                            </IconButton>
+                            <Typography
+                                variant="body2"
+                                color="primary"
+                                sx={{
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                管理画面
+                            </Typography>
+                        </Stack>
                     )}
-                    {!authenticated && (
+                    <Stack
+                        spacing={0}
+                        direction="row"
+                        onClick={handleBackGuestMain}
+                    >
                         <IconButton
                             color="primary"
                             aria-label="back to question list"
-                            onClick={handleBackGuestMain}
                         >
                             <KeyboardBackspaceIcon />
                         </IconButton>
-                    )}
+                        <Typography
+                            variant="body2"
+                            color="primary"
+                            sx={{
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            アンケート一覧
+                        </Typography>
+                    </Stack>
                 </Container>
             )}
         </Container>

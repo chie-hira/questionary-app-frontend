@@ -6,6 +6,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import {
+    Box,
     FormControlLabel,
     FormLabel,
     IconButton,
@@ -134,14 +135,16 @@ function AddQuestion({ userId }: { userId: number }) {
     };
 
     return (
-        <div>
-            <Button
-                variant="outlined"
-                sx={{ widows: "270px" }}
-                onClick={handleClickOpen}
-            >
-                質問作成
-            </Button>
+        <>
+            <Box alignSelf="flex-start">
+                <Button
+                    variant="outlined"
+                    sx={{ widows: "270px" }}
+                    onClick={handleClickOpen}
+                >
+                    質問作成
+                </Button>
+            </Box>
             <Dialog
                 fullWidth={true}
                 maxWidth="sm"
@@ -263,7 +266,7 @@ function AddQuestion({ userId }: { userId: number }) {
                     <Button onClick={handleCreateQuestion}>送信</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 }
 
