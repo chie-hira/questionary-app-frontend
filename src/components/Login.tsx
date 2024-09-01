@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LoginResponse } from "../types/loginResponse";
 import { LOGIN } from "../mutations/authMutations";
+import Header from "./Header";
 
 const defaultTheme = createTheme();
 
@@ -36,7 +37,7 @@ function SignIn() {
             }
 
             if (localStorage.getItem("token")) {
-                navigate("/");
+                navigate("/admin");
             }
         } catch (error: unknown) {
             if (error instanceof Error && error.message === "Unauthorized") {
@@ -52,6 +53,7 @@ function SignIn() {
 
     return (
         <ThemeProvider theme={defaultTheme}>
+            <Header />
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -114,12 +116,7 @@ function SignIn() {
                         <Grid container>
                             <Grid item>
                                 <Link href="/signUp" variant="body2">
-                                    {"すでにアカウントをお持ちの方はこちら"}
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="/guest" variant="body2">
-                                    {"ゲストユーザーはこちら"}
+                                    {"Don't have an account? Sign Up"}
                                 </Link>
                             </Grid>
                         </Grid>

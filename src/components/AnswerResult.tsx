@@ -46,9 +46,9 @@ function AnswerResult() {
         variables: { questionId: parsedId },
     });
 
-    console.log(countRespondentData?.countAnswerRespondentsByQuestionId);
-
     const answerFormat = questionData?.getQuestionById.answerFormat;
+    const question = questionData?.getQuestionById.question;
+    
     const countRespondents =
         countRespondentData?.countAnswerRespondentsByQuestionId
             ? countRespondentData.countAnswerRespondentsByQuestionId
@@ -80,6 +80,7 @@ function AnswerResult() {
                         authenticated={authenticated}
                         countRespondents={countRespondents}
                         parsedId={parsedId}
+                        question={question}
                     />
                 )}
         </>

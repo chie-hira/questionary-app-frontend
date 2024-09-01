@@ -169,7 +169,10 @@ export default function AnswerForm() {
     };
 
     const handleBackMain = () => {
-        navigate("/");
+        navigate("/admin");
+    };
+    const handleBackGuestMain = () => {
+        navigate("/guest");
     };
 
     /* ********** 戻るボタンの表示切替のためのログイン状態確認 ********** */
@@ -186,6 +189,9 @@ export default function AnswerForm() {
     return (
         <Container maxWidth="sm" sx={{ pt: 5 }}>
             <Stack spacing={4} direction="column" m={8} alignItems="center">
+                <Typography variant="h5" align="center" sx={{ mb: 2 }}>
+                    回答画面
+                </Typography>
                 <Box component="form" sx={{ mt: 1 }} minWidth={500}>
                     <Typography component="h1" fontSize={18}>
                         回答者情報
@@ -360,14 +366,53 @@ export default function AnswerForm() {
                         </Box>
                     )}
                     {authenticated && (
+                        <Stack
+                            spacing={0}
+                            direction="row"
+                            onClick={handleBackMain}
+                        >
+                            <IconButton
+                                color="primary"
+                                aria-label="back to question list"
+                            >
+                                <KeyboardBackspaceIcon />
+                            </IconButton>
+                            <Typography
+                                variant="body2"
+                                color="primary"
+                                sx={{
+                                    cursor: "pointer",
+                                    display: "flex",
+                                    alignItems: "center",
+                                }}
+                            >
+                                管理画面
+                            </Typography>
+                        </Stack>
+                    )}
+                    <Stack
+                        spacing={0}
+                        direction="row"
+                        onClick={handleBackGuestMain}
+                    >
                         <IconButton
                             color="primary"
                             aria-label="back to question list"
-                            onClick={handleBackMain}
                         >
                             <KeyboardBackspaceIcon />
                         </IconButton>
-                    )}
+                        <Typography
+                            variant="body2"
+                            color="primary"
+                            sx={{
+                                cursor: "pointer",
+                                display: "flex",
+                                alignItems: "center",
+                            }}
+                        >
+                            アンケート一覧
+                        </Typography>
+                    </Stack>
                 </Box>
             </Stack>
         </Container>
